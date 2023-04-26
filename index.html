@@ -52,7 +52,6 @@
 
         beepSound.addEventListener('canplaythrough', () => {
             // Beep sound is ready to play, start the timer
-            startTimer();
         });
 
         function startTimer() {
@@ -105,6 +104,8 @@
             startTimer();
             playBeepSound(); // Play beep sound when timer is reset
         });
+
+        resetTimer(); // Call resetTimer function when the page is loaded
     </script>
 </body>
 </html>
