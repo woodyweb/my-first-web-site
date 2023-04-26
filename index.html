@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>One Minute Countdown Timer with Beep Sound, Faster Blinking Text, and End Sound</title>
+    <style>
+        .timer {
+            font-size: 10vw; /* Use vw (viewport width) unit for font size */
+            text-align: center;
+            margin-top: 20vh; /* Use vh (viewport height) unit for margin top */
+            cursor: pointer;
+        }
+
+        .timer.red {
+            color: red;
+        }
+
+        /* Add CSS animation for blinking effect with faster duration */
+        .blink {
+            animation: blink 0.3s infinite;
+        }
+
+        @keyframes blink {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Add CSS for image with margin */
+        .logo {
+            display: block;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+<body>
+    <a href="http://www.mimiworld.com/">
+        <img class="logo" src="image.jpg" alt="Mimi World" width="120" height="90">
+    </a>
+    <div class="timer" id="timer">60</div>
+    <script>
+        const timerElement = document.getElementById('timer');
+        let remainingTime = 60;
+        let interval;
+        let beepSound = new Audio('beep.mp3'); // Replace with your beep sound file
+        let endSound = new Audio('end.mp3'); // Replace with your end sound file
+
+        beepSound.addEventListener('canplaythrough', () => {
+            // Beep sound is ready to play, start the timer
+            startTimer();
+        });
+
+        function startTimer() {
+            if (!interval) {
+                // Check if interval is not already running
+                interval = setInterval(() => {
+                    remainingTime--;
+                    if (remainingTime >= 0) {
+                        timerElement.textContent = remainingTime;
+                        if (remainingTime <= 10) {
+                            timerElement.classList.add('red');
+                            playBeepSound();
+                        }
+                        // Add 'blink' class to timer text for blinking effect
+                        timerElement.classList.add('blink');
+                        setTimeout(() => {
+                            // Remove 'blink' class after 300 milliseconds (0.3 seconds)
+                            timerElement.classList.remove('blink');
+                        }, 300);
+                    } else {
+                        clearInterval(interval);
+                        playEndSound(); // Play end sound when timer reaches 0 seconds
+                    }
+                }, 1000); // 1000 milliseconds = 1 second
+            }
+        }
+
+        function playBeepSound() {
+            // Reset the beep sound to the beginning before playing
+            beepSound.currentTime = 0;
+            beepSound.play();
+        }
+
+        function playEndSound() {
+            // Reset the end sound to the beginning before playing
+            endSound.currentTime = 0;
+            endSound.play();
+        }
+
+        function resetTimer() {
+            clearInterval(interval);
+            interval = null; // Reset the interval variable
+            remainingTime = 60;
+            timerElement.textContent = remainingTime;
+            timerElement.classList.remove('red');
+        }
+
+        timerElement.addEventListener('click', () => {
+            resetTimer();
+            startTimer();
+            playBeepSound(); // Play beep sound when timer is reset
+        });
+    </script>
+</body>
+</html>
